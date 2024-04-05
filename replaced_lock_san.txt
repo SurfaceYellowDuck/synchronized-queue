@@ -1,0 +1,30 @@
+WARNING: ThreadSanitizer: data race (pid=35592)
+Read of size 8 at 0xfffff4501e80 by thread T2:
+#0 push <null> (a.out+0x1168)
+#1 push_pop_items <null> (a.out+0x1650)
+
+Previous write of size 8 at 0xfffff4501e80 by thread T1 (mutexes: write M0):
+#0 pop <null> (a.out+0x13c4)
+#1 push_pop_items <null> (a.out+0x168c)
+
+Location is heap block of size 120 at 0xfffff4501e80 allocated by main thread:
+#0 malloc ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:655 (libtsan.so.0+0x354ac)
+#1 initQueue <null> (a.out+0xf38)
+#2 main <null> (a.out+0x16e8)
+
+Mutex M0 (0xfffff4501e98) created at:
+#0 pthread_mutex_init ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1227 (libtsan.so.0+0x4f50c)
+#1 initQueue <null> (a.out+0x101c)
+#2 main <null> (a.out+0x16e8)
+
+Thread T2 (tid=35595, running) created by main thread at:
+#0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:969 (libtsan.so.0+0x63bb0)
+#1 main <null> (a.out+0x1744)
+
+Thread T1 (tid=35594, finished) created by main thread at:
+#0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:969 (libtsan.so.0+0x63bb0)
+#1 main <null> (a.out+0x1744)
+
+### SUMMARY: ThreadSanitizer: data race (/home/alex/synchronized-queue/a.out+0x1168) in push
+
+ThreadSanitizer: reported 1 warnings
